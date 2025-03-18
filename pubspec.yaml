@@ -1,0 +1,25 @@
+name: my_flutter_template_getx
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.6
+  get: 4.7.2
+  flutter_screenutil: ^5.9.3  #屏幕适配
+  logger: ^2.3.0              #日志管理
+  flutter: 
+    sdk: flutter
+
+dev_dependencies: 
+  flutter_gen_runner: ^5.6.0  #管理资源文件
+  build_runner: ^2.4.10       #管理资源文件
+  flutter_lints: ^3.0.0
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+
