@@ -1,6 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.github.zhangshipeng.liquid">
     <application
-        android:label="my_flutter_template_getx"
+        android:label="flutter_liquid"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

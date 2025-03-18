@@ -2,7 +2,7 @@
  * @Author: 张仕鹏 1120148291@qq.com
  * @Date: 2025-03-13 15:20:06
  * @LastEditors: 张仕鹏 1120148291@qq.com
- * @LastEditTime: 2025-03-18 15:45:37
+ * @LastEditTime: 2025-03-18 21:16:52
  * @FilePath: /flutter-template-getx/lib/app/core/base/view/base_view.dart
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -10,10 +10,11 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_liquid/app/core/base/controller/base_controller.dart';
+import 'package:flutter_liquid/app/core/utils/screen_adapter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
-import 'package:my_flutter_template_getx/app/core/base/controller/base_controller.dart';
-import 'package:my_flutter_template_getx/app/core/utils/screen_adapter.dart';
+
 
 abstract class BaseView<Controller extends BaseController>
     extends GetView<Controller> {

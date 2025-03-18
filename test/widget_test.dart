@@ -3,7 +3,7 @@
  * @Date: 2025-03-18 14:16:37
  * @LastEditors: 张仕鹏 1120148291@qq.com
  * @LastEditTime: 2025-03-18 14:29:32
- * @FilePath: /my_flutter_template_getx/test/widget_test.dart
+ * @FilePath: /flutter_liquid/test/widget_test.dart
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 // // This is a basic Flutter widget test.
@@ -16,7 +16,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_test/flutter_test.dart';
 
-// import 'package:my_flutter_template_getx/main.dart';
+// import 'package:flutter_liquid/main.dart';
 
 // void main() {
 //   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

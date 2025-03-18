@@ -1,7 +1,7 @@
-name: my_flutter_template_getx
+name: flutter_liquid
 version: 1.0.0+1
 publish_to: none
-description: A new Flutter project.
+description: flutter's liquid
 environment: 
   sdk: '>=3.4.3 <4.0.0'
 

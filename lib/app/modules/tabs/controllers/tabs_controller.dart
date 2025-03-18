@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:my_flutter_template_getx/app/modules/home/views/home_view.dart';
+import 'package:flutter_liquid/app/modules/home/views/home_view.dart';
 
 class TabsController extends GetxController {
 

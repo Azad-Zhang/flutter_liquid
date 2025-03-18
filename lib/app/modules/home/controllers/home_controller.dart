@@ -1,5 +1,5 @@
+import 'package:flutter_liquid/app/core/base/controller/base_controller.dart';
 import 'package:get/get.dart';
-import 'package:my_flutter_template_getx/app/core/base/controller/base_controller.dart';
 
 class HomeController extends BaseController {
   //TODO: Implement HomeController
