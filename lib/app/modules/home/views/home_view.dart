@@ -2,7 +2,7 @@
  * @Author: 张仕鹏 1120148291@qq.com
  * @Date: 2025-03-19 10:27:01
  * @LastEditors: 张仕鹏 1120148291@qq.com
- * @LastEditTime: 2025-03-20 17:05:02
+ * @LastEditTime: 2025-03-27 16:39:31
  * @FilePath: /my_flutter_template_getx/lib/app/modules/home/views/home_view.dart
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,10 +14,14 @@
  * @FilePath: /flutter_liquid/lib/app/modules/home/views/home_view.dart
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_liquid/app/modules/home/widgets/aaa.dart';
 import 'package:flutter_liquid/app/modules/home/widgets/animated.dart';
 import 'package:flutter_liquid/app/modules/home/widgets/liquid.dart';
 import 'package:flutter_liquid/app/modules/home/widgets/shadow.dart';
+import 'package:flutter_liquid/app/modules/home/widgets/test.dart';
 
 import 'package:get/get.dart';
 import 'package:flutter_liquid/app/core/base/view/base_view.dart';
@@ -49,19 +53,24 @@ class HomeView extends BaseView<HomeController> {
   @override
   Widget body(BuildContext context) {
 
+
+    // return AnimatedWaveBlurExample222();
+
     return DemoPage();
 
-    return AnimatedWaveInnerShadowWidget(
-            width: 300,
-            height: 200,
-            waveColors: [Colors.purple, Colors.pink],
-            blurRadius: 15.0,
-            offset: const Offset(-8, -8),
-            shadowColor: Colors.black.withOpacity(0.5),
-            innerShadowColor: Colors.black.withOpacity(0.3),
-            innerBlurRadius: 8.0,
-            animationDuration: const Duration(seconds: 4),
-          );
+    // return AnimatedWaveInnerShadowWidget(
+    //   width: 300,
+    //   height: 200,
+    //   waveColors: [Colors.purple, Colors.pink],
+    //   blurRadius: 15.0,
+    //   offset: const Offset(-8, -8),
+    //   shadowColor: Colors.black.withOpacity(0.5),
+    //   innerShadowColor: Colors.black.withOpacity(0.3),
+    //   innerBlurRadius: 8.0,
+    //   animationDuration: const Duration(seconds: 4),
+    // );
+    
+    
     // return Container(
     //   width: double.infinity,
     //   height: double.infinity,
