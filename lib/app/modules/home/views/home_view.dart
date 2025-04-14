@@ -2,7 +2,7 @@
  * @Author: 张仕鹏 1120148291@qq.com
  * @Date: 2025-03-19 10:27:01
  * @LastEditors: 张仕鹏 1120148291@qq.com
- * @LastEditTime: 2025-04-14 16:20:32
+ * @LastEditTime: 2025-04-14 16:29:11
  * @FilePath: /my_flutter_template_getx/lib/app/modules/home/views/home_view.dart
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -17,7 +17,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_liquid/app/modules/home/widgets/shadow.dart';
+import 'package:flutter_liquid/app/modules/home/widgets/liquid_ball.dart';
 
 
 import 'package:get/get.dart';
@@ -50,8 +50,8 @@ class HomeView extends BaseView<HomeController> {
   @override
   Widget body(BuildContext context) {
     return Center(
-      child: MovingWaveShadowWidget(
-        originalGradient: LinearGradient(
+      child: LiquidBallWidget(
+        waveGradient: LinearGradient(
           colors: [
             Color(0xFFFF9797),
             Color(0xFFFF2C2C),
@@ -59,9 +59,9 @@ class HomeView extends BaseView<HomeController> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        padding: 10,
-        border: Border.all(color: Colors.green),
-        size: 200, 
+        containerPadding: 10,
+        containerBorder: Border.all(color: Colors.green),
+        containerSize: 200, 
         // shadowColor: Colors.red,
       ),
     );
