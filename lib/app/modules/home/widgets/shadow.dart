@@ -3,13 +3,29 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_liquid/app/core/utils/screen_adapter.dart';
 
+// 定义一个常量的 Border 对象
+const defaultBorder = Border.fromBorderSide(BorderSide(color: Colors.red, width: 1));
+
 class MovingWaveShadowWidget extends StatefulWidget {
-  final Gradient originalGradient;
+  final Gradient? originalGradient; // 阴影渐变色，改为可选参数
+  final Color? shadowColor; // 新增阴影颜色参数，改为可选参数
+
+  final Duration waveDuration; // 新增时长参数
+  final double size;
+  final double padding;
+  final Border border;
 
   const MovingWaveShadowWidget({
     Key? key,
-    required this.originalGradient,
-  }) : super(key: key);
+    this.originalGradient,
+    this.shadowColor,
+    this.waveDuration = const Duration(seconds: 2), // 默认 2 秒
+    this.size = 100,
+    this.padding = 10,
+    this.border = defaultBorder,
+  }) : assert((originalGradient != null && shadowColor == null) || (originalGradient == null && shadowColor != null),
+            'originalGradient and shadowColor only one can be passed in'),
+       super(key: key);
 
   @override
   _MovingWaveShadowWidgetState createState() => _MovingWaveShadowWidgetState();
@@ -25,13 +41,14 @@ class _MovingWaveShadowWidgetState extends State<MovingWaveShadowWidget>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 5),
+      duration: widget.waveDuration, // 使用外部传入的时长
+      lowerBound: 0.0,    // 明确设置下限
+      upperBound: 1.0,    // 设置无限循环的上限
     )..repeat();
-    _offsetAnimation = Tween<double>(begin: 0, end: -1).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.linear,
-      ),
+    // 使用无限增长的动画值
+    _offsetAnimation = _controller.drive(
+      Tween<double>(begin: 0.0, end: 1.0),
+      
     );
   }
 
@@ -47,19 +64,18 @@ class _MovingWaveShadowWidgetState extends State<MovingWaveShadowWidget>
       animation: _offsetAnimation,
       builder: (context, child) {
         return Container(
-          width: ScreenAdapter.height(200),
-          height: ScreenAdapter.height(200),
+          width: widget.size,
+          height: widget.size,
+          padding: EdgeInsets.all(widget.padding),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.red,
-              width: 1,
-            ),
+            border: widget.border,
           ),
           child: CustomPaint(
             painter: _WaveShadowPainter(
               _offsetAnimation.value,
               widget.originalGradient,
+              widget.shadowColor, // 传递阴影颜色
             ),
           ),
         );
@@ -70,101 +86,60 @@ class _MovingWaveShadowWidgetState extends State<MovingWaveShadowWidget>
 
 class _WaveShadowPainter extends CustomPainter {
   final double offset;
-  final Gradient originalGradient;
+  final Gradient? originalGradient;
+  final Color? shadowColor; // 新增阴影颜色属性
 
-  _WaveShadowPainter(this.offset, this.originalGradient);
+  _WaveShadowPainter(this.offset, this.originalGradient, this.shadowColor);
 
   @override
   void paint(Canvas canvas, Size size) {
+    final phase = offset % 1.0; // 使用模运算实现无限循环
+    final path = _createWavePath(size, phase);
+
     final center = size.center(Offset.zero);
     final radius = size.width / 2;
 
-    // 第一步：绘制红色阴影
     final shadowPath = _createWavePath(size, offset);
     canvas.save();
     canvas.clipPath(Path()..addOval(Rect.fromCircle(center: center, radius: radius)));
-    canvas.drawPath(shadowPath, Paint()..color = Color(0xFFD81C1C));
-    canvas.restore();
 
-    // 第二步：绘制模糊的渐变波浪
-    final blurWavePaint = Paint()
-      ..shader = originalGradient.createShader(Rect.fromCircle(
-        center: center,
-        radius: radius,
-      ))
-      ..imageFilter = ImageFilter.blur(
-        sigmaX: 8,
-        sigmaY: 8,
-        tileMode: TileMode.decal, // 使用clamp模式防止边缘裁切
-      );
+    if (originalGradient != null) {
+      final paint = Paint()
+        ..shader = originalGradient!.createShader(Rect.fromCircle(center: center, radius: radius));
+      canvas.drawPath(shadowPath, paint);
+    } else if (shadowColor != null) {
+      canvas.drawPath(shadowPath, Paint()..color = shadowColor!);
+    }
 
-    canvas.save();
-    // 应用偏移并保留模糊溢出
-    //偏移这里需要做一下适配
-    canvas.translate(size.width * 0.06, size.height * 0.06);
-    
-    // 创建扩展的绘制区域（增加10%的绘制范围）
-    final extendedRect = Rect.fromCenter(
-      center: center,
-      width: size.width,
-      height: size.height
-    );
-
-    // // 在新的绘制区域绘制波浪
-    canvas.saveLayer(extendedRect, blurWavePaint);
-    canvas.drawPath(_createWavePath(size, offset), Paint()..shader = originalGradient.createShader(extendedRect));
-    canvas.restore();
-
-    // 第三步：应用圆形蒙版
-    final clipPath = Path()
-      ..addOval(Rect.fromCircle(
-        center: center,
-        radius: radius - max(size.width * 0.06, size.height * 0.06),
-      ));
-    canvas.clipPath(clipPath);
     canvas.restore();
   }
 
+  // 修改波形生成函数相位计算
   Path _createWavePath(Size size, double phase) {
-    final path = Path();
-    final waveHeight = 18.0;
-    final baseY = size.height * 0.48;
+    const waveHeight = 16.0;
+    final baseY = size.height * 0.52;
+    const horizontalPadding = 50.0;
 
-    path.moveTo(-50, baseY); // 左侧扩展绘制区域
-    for (double x = -50; x <= size.width + 50; x++) {
-      final y = baseY + waveHeight * sin((x / size.width * 4 * pi) + phase * 2 * pi);
+    final path = Path();
+    path.moveTo(-horizontalPadding, baseY);
+
+    // 使用持续增长的相位值
+    final waveFrequency = 3.5;
+    for (double x = -horizontalPadding; x <= size.width + horizontalPadding; x++) {
+      final radians = (x / size.width * waveFrequency * pi) + (phase * 2 * pi);
+      final y = baseY + waveHeight * sin(radians);
       path.lineTo(x, y);
     }
-    path.lineTo(size.width + 50, size.height + 50); // 右侧和下侧扩展
-    path.lineTo(-50, size.height + 50);
+
+    path.lineTo(size.width + horizontalPadding, size.height + 100);
+    path.lineTo(-horizontalPadding, size.height + 100);
     path.close();
+
     return path;
   }
 
   @override
   bool shouldRepaint(covariant _WaveShadowPainter oldDelegate) {
-    return oldDelegate.offset != offset || oldDelegate.originalGradient != originalGradient;
+    return oldDelegate.offset != offset || oldDelegate.originalGradient != originalGradient || oldDelegate.shadowColor != shadowColor;
   }
-}
-
-// 使用示例
-class DemoPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Colors.black,
-      body: Center(
-        child: MovingWaveShadowWidget(
-          originalGradient: LinearGradient(
-            colors: [
-              Color(0xFFFF9797).withOpacity(0.6),
-              Color(0xFFFF2C2C).withOpacity(0.6),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-      ),
-    );
-  }
-}
+}    
